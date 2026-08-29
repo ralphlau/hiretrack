@@ -1,25 +1,26 @@
-import { PRIORITY_CONFIG, STAGE_CONFIG, type Priority, type Stage } from "@/types";
+import { Badge } from "./Badge";
+import { PRIORITY_TONE, STAGE_TONE, type Priority, type Stage } from "@/types";
 
 interface StatusBadgeProps {
   kind: "stage" | "priority";
   value: Stage | Priority;
 }
 
+/**
+ * Thin wrapper mapping domain values (pipeline stage / priority) onto the
+ * generic Badge primitive's tones. Same external API as before, so every
+ * call site (`<StatusBadge kind="stage" value={...} />`) is unchanged.
+ */
 export function StatusBadge({ kind, value }: StatusBadgeProps) {
   if (kind === "stage") {
-    const config = STAGE_CONFIG[value as Stage];
+    const stage = value as Stage;
     return (
-      <span className={`inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-xs font-medium ${config.surface} ${config.border} ${config.accent}`}>
-        <span className={`h-1.5 w-1.5 rounded-full ${config.dot}`} />
-        {config.label}
-      </span>
+      <Badge tone={STAGE_TONE[stage]} dot>
+        {stage}
+      </Badge>
     );
   }
 
-  const config = PRIORITY_CONFIG[value as Priority];
-  return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${config.surface} ${config.accent}`}>
-      {config.label}
-    </span>
-  );
+  const priority = value as Priority;
+  return <Badge tone={PRIORITY_TONE[priority]}>{priority}</Badge>;
 }

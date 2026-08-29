@@ -1,15 +1,84 @@
 @import "tailwindcss";
 
-:root {
-  --background: #020617;
-  --foreground: #f8fafc;
-}
+/* ============================================================
+   TALA design tokens — restrained enterprise SaaS system.
+   Old dark-glass tokens (--background/--foreground) are removed;
+   every existing screen sets its own explicit bg/text classes on
+   a min-h-screen wrapper, so this swap doesn't touch them visually.
+   New screens should build on the tokens below instead of raw hex.
+   ============================================================ */
+@theme {
+  /* --- Surfaces --- */
+  --color-canvas: #faf9f7;         /* page background */
+  --color-surface: #ffffff;        /* cards, sidebar, header, inputs */
+  --color-surface-sunken: #f2f1ee; /* recessed panels, kanban columns, hover fill */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* --- Borders --- */
+  --color-border: #e3e1dc;         /* default hairline */
+  --color-border-strong: #cfccc4;  /* dividers, stronger separation */
+
+  /* --- Text (warm neutral ink, not cool slate) --- */
+  --color-ink: #17171a;            /* primary text */
+  --color-ink-muted: #6b6963;      /* secondary text, labels */
+  --color-ink-faint: #87847d;      /* placeholders, disabled, icon strokes — never body text */
+
+  /* --- Accent (deep navy, not sky blue) — the ONLY blue in the system,
+     reserved exclusively for actionable UI so it never competes with
+     a status color for meaning --- */
+  --color-accent: #1f3358;
+  --color-accent-strong: #16233d;
+  --color-accent-soft: #e8edf4;
+
+  /* --- Pipeline stage colors ---
+     Applied is intentionally neutral (reuses the ink-muted/surface-sunken
+     tones) rather than colored: it's the default no-signal starting stage,
+     and giving it its own hue was colliding with the navy accent. Only
+     stages where something has actually happened get a color. */
+  --color-applied: #6b6963;
+  --color-applied-soft: #f2f1ee;
+  --color-interview: #8c5f0c;
+  --color-interview-soft: #f5eedf;
+  --color-offer: #2f6e52;
+  --color-offer-soft: #e7f0eb;
+  --color-rejected: #9b3b37;
+  --color-rejected-soft: #f5e9e8;
+
+  /* --- Semantic --- */
+  --color-success: #2f6e52;
+  --color-success-soft: #e7f0eb;
+  --color-danger: #9b3b37;
+  --color-danger-strong: #7e302c;
+  --color-danger-soft: #f5e9e8;
+
+  /* --- Fonts --- */
+  --font-display: var(--font-display), "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-body), "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono), "IBM Plex Mono", ui-monospace, monospace;
+
+  /* --- Radius (tight, restrained — no rounded-2xl/3xl glass look) --- */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* --- Shadow (subtle elevation instead of glass/blur) --- */
+  --shadow-xs: 0 1px 2px rgba(23, 23, 26, 0.04);
+  --shadow-sm: 0 1px 2px rgba(23, 23, 26, 0.04), 0 1px 1px rgba(23, 23, 26, 0.03);
+  --shadow-md: 0 4px 12px -2px rgba(23, 23, 26, 0.08), 0 2px 4px -2px rgba(23, 23, 26, 0.04);
+  --shadow-lg: 0 12px 32px -8px rgba(23, 23, 26, 0.18);
+
+  /* --- Type scale (paired font-size/line-height, Tailwind v4 --text-* namespace) --- */
+  --text-display: 2.5rem;
+  --text-display--line-height: 1.15;
+  --text-h1: 1.75rem;
+  --text-h1--line-height: 1.25;
+  --text-h2: 1.25rem;
+  --text-h2--line-height: 1.35;
+  --text-h3: 1rem;
+  --text-h3--line-height: 1.4;
+  --text-stat: 1.875rem;
+  --text-stat--line-height: 1.2;
+  --text-caption: 0.6875rem;
+  --text-caption--line-height: 1.3;
 }
 
 * {
@@ -17,15 +86,23 @@
 }
 
 html {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
   min-height: 100vh;
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
 }
+
+/* h1/h2/h3 intentionally do NOT get a blanket font-family rule here.
+   In-product headings (dashboard, reports, admin) use Inter Tight like
+   everything else, distinguished by weight/size, not typeface — two
+   grotesques at 16-20px don't read as distinct. Instrument Sans is
+   reserved for the marketing hero on the login screen only, applied
+   there explicitly via the font-display utility class. */
 
 button,
 input,
@@ -35,6 +112,11 @@ select {
 }
 
 ::selection {
-  background: rgba(56, 189, 248, 0.35);
-  color: white;
+  background: var(--color-accent-soft);
+  color: var(--color-accent-strong);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }

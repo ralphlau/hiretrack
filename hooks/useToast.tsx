@@ -40,11 +40,11 @@ export function useToast() {
 function toneClasses(tone: ToastTone) {
   switch (tone) {
     case "success":
-      return "border-emerald-400/30 bg-emerald-500/10 text-emerald-200";
+      return "border-success-soft bg-success-soft text-success";
     case "error":
-      return "border-rose-400/30 bg-rose-500/10 text-rose-200";
+      return "border-danger-soft bg-danger-soft text-danger";
     default:
-      return "border-sky-400/30 bg-sky-500/10 text-sky-200";
+      return "border-accent-soft bg-accent-soft text-accent-strong";
   }
 }
 
@@ -62,19 +62,19 @@ export function ToastContainer({
       {toasts.map((toast) => (
         <div
           key={toast.id}
-          className={`pointer-events-auto rounded-2xl border px-4 py-3 shadow-2xl backdrop-blur ${toneClasses(toast.tone)}`}
+          className={`pointer-events-auto rounded-md border px-4 py-3 shadow-md ${toneClasses(toast.tone)}`}
         >
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="text-sm font-semibold">{toast.title}</p>
+              <p className="text-sm font-medium text-ink">{toast.title}</p>
               {toast.description ? (
-                <p className="mt-1 text-sm text-slate-300">{toast.description}</p>
+                <p className="mt-1 text-[13px] text-ink-muted">{toast.description}</p>
               ) : null}
             </div>
             <button
               type="button"
               onClick={() => onDismiss(toast.id)}
-              className="rounded-full p-1 text-slate-300 transition hover:bg-white/10 hover:text-white"
+              className="rounded-md p-1 text-ink-faint transition-colors hover:bg-surface hover:text-ink"
               aria-label="Dismiss notification"
             >
               <X className="h-4 w-4" />
